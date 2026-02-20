@@ -1,0 +1,24 @@
+{
+  "name": "claude-content",
+  "version": "1.0.0",
+  "description": "Social media content machine powered by AI",
+  "main": "index.js",
+  "type": "module",
+  "scripts": {
+    "start": "node index.js",
+    "brand-guide": "node index.js brand-guide",
+    "origin-story": "node index.js origin-story",
+    "opinions": "node index.js opinions",
+    "knowledge": "node index.js knowledge",
+    "rapid-fire": "node index.js rapid-fire",
+    "niche": "node index.js niche",
+    "competitors": "node index.js competitors",
+    "brand-doc": "node index.js brand-doc",
+    "competitor-doc": "node index.js competitor-doc"
+  },
+  "dependencies": {
+    "@notionhq/client": "^2.2.15",
+    "axios": "^1.7.7",
+    "dotenv": "^16.4.5"
+  }
+}
