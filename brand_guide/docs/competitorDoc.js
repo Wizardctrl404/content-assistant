@@ -59,12 +59,37 @@ export async function writeCompetitorToNotion(competitor) {
     ),
     divider(),
 
+    heading2("Viral Topics"),
+    paragraph("Topics and themes that consistently drive engagement for this competitor."),
+    ...bulletList(
+      (competitor.viralTopics || []).length > 0
+        ? competitor.viralTopics
+        : ["[Run /competitor-intel to populate]"]
+    ),
+    divider(),
+
+    heading2("Viral Hooks"),
+    paragraph("Opening structures and patterns they use repeatedly."),
+    ...bulletList(
+      (competitor.viralHooks || []).length > 0
+        ? competitor.viralHooks
+        : ["[Run /competitor-intel to populate]"]
+    ),
+    divider(),
+
+    heading2("Angles You Could Use"),
+    paragraph("How to enter the same conversations with your own positioning."),
+    ...bulletList(
+      (competitor.angles || []).length > 0
+        ? competitor.angles
+        : ["[Run /competitor-intel to populate]"]
+    ),
+    divider(),
+
     heading2("Strategic Notes"),
     ...bulletList([
-      `Strengths: [Fill in]`,
-      `Weaknesses: [Fill in]`,
-      `Content Gaps: [Fill in]`,
-      `Differentiation Opportunity: [Fill in]`,
+      `Gaps: ${competitor.gaps || "[Fill in]"}`,
+      `Differentiation Opportunity: ${competitor.differentiationOpportunity || "[Fill in]"}`,
     ]),
     divider(),
 

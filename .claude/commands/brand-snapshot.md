@@ -1,176 +1,201 @@
-# /brand-snapshot — Full Brand Summary Document
+# /brand-snapshot — Brand Outline Doc
 
 ## Purpose
-The final synthesis skill. Takes everything extracted across all sessions and produces the complete brand source-of-truth document: positioning, one-liner, origin hook, core beliefs, point of view, audience, voice guide, and what makes them different. This is the document they hand to a designer, a PR person, a ghostwriter, or themselves when they forget who they are.
+Compiles everything extracted across all sessions into a single Brand Outline Doc — the source of truth for positioning, voice, origin, beliefs, hot takes, frameworks, and audience. This is what gets handed to a designer, writer, or collaborator. Also pushes to Notion via `brandOutline.js` if configured.
 
 ## Before Starting
-1. Read ALL files:
+1. Read ALL data files:
    - `USER_PROFILE.md`
    - `data/origin_notes.md`
-   - `data/origin_story_draft.md` (if exists)
    - `data/rapidfire_answers.md`
    - `data/hot_takes.md`
    - `data/beliefs.md`
    - `data/voice_patterns.md`
-   - `data/brand_snapshot.md` (if exists — update, don't replace)
-2. Assess completeness. If critical sections are missing, tell the user which skills to run first:
-   - No origin material → run `/origin-story`
-   - No beliefs → run `/belief-mining`
-   - No takes → run `/hot-takes`
-   - No voice data → run `/voice-capture`
+   - `data/brand_snapshot.md` (existing — update, don't replace)
+2. Assess completeness. Tell the user what's missing and which skills to run first:
+   - No origin → `/origin-story`
+   - No beliefs → `/belief-mining`
+   - No hot takes → `/hot-takes`
+   - No voice data → `/voice-capture`
 
-Minimum viable: `USER_PROFILE.md` complete + at least 2 other data files with real content.
-
-## Your Role
-You are the synthesizer. You've been in every room. You've heard everything. Now you make it coherent.
-
-Your job is not to add new ideas — it's to find the throughline. What's the single thing that holds all of this together? What's the idea that connects their origin, their beliefs, their takes, and their audience? Find it, name it, and build the document around it.
-
-## Conversation Flow
-
-### Opening
-
-Give them an honest read before you start writing:
-
-> "I've read through everything. Here's what I think the core of your brand is: [2–3 sentences — your honest synthesis of the throughline]. I'm going to build the brand snapshot around that. Before I do — does that feel right? Anything missing or wrong?"
-
-Let them respond. Adjust if needed. Then write.
-
-### Build the Document
-
-Work through each section. Write it, present it, get quick feedback, finalize.
-
-Do not write the whole thing and dump it. Build it section by section so they can react and refine as you go.
+Minimum to proceed: `USER_PROFILE.md` complete + at least 2 data files with real content.
 
 ---
 
-## Output — data/brand_snapshot.md
+## Build the Brand Outline Doc
+
+Work through each section. Present one at a time, get quick confirmation, then move to the next.
+
+---
+
+## Output — data/brand_outline.md
 
 ```
-# Brand Snapshot — [Name]
-> Last updated: [Date] | Built with /brand-snapshot
+# Brand Outline — [Name]
+> [Role / Company]
+> Last updated: [Date]
 
 ---
 
-## The Core Idea
-[1–2 sentences. The single idea that holds their entire brand together. Not a mission statement — a real sentence about what they stand for and why it matters. This is the hardest line to write and the most important.]
+## 1. Positioning
 
----
-
-## Who They Are
+**Who they are (one line):**
+[The guy/person who does X for Y]
 
 **One-liner:**
-[One sentence. Who they are + what they do + who they do it for. Should work as a Twitter bio, a podcast intro, or the first sentence of an article.]
+[Full one-sentence positioning — who + what + for whom]
 
-**Short positioning paragraph:**
-[3–5 sentences. Expands the one-liner. Includes: what they do, who they do it for, what makes their approach different, and what the reader should do or think as a result of knowing them. Written in third person for use in press, bios, decks.]
-
----
-
-## Origin Hook
-[2–3 sentences. The compressed version of their origin story — the most compelling detail + the contrast + why it matters for what they do now. This is the version you'd use at the start of a talk, a podcast appearance, or an About page.]
+**The core idea:**
+[2–3 sentences. The central tension or problem they solve. Written in plain language, not marketing-speak.]
 
 ---
 
-## Core Beliefs (3–5)
-These are the things they'd stake their reputation on.
+## 2. Origin Story
 
-1. **[Belief name/headline]**
-   [1–2 sentences expanding the belief. Written in their voice.]
+**The hook:**
+[The most compelling specific moment — one sentence]
 
-2. **[Belief name/headline]**
-   [1–2 sentences.]
+**The before:**
+[Who they were, what they assumed their life would look like]
 
-3. **[Belief name/headline]**
-   [1–2 sentences.]
+**The turning point:**
+[What happened — specific, not general]
 
-4. (if applicable)
+**The proof point:**
+[First real win. The moment it became undeniable.]
 
-5. (if applicable)
+**The mission:**
+[Why they do this now. What their story makes them uniquely able to see or do.]
 
----
-
-## Point of View
-[What they see that others don't. What they believe the industry gets wrong. What position they hold that creates useful friction. 3–5 sentences. This is their intellectual territory — the ground they own.]
-
----
-
-## Audience
-
-**Who they're for:**
-[Specific. Not a demographic. A person with a situation, a belief, a problem, or a desire.]
-
-**Who they're NOT for:**
-[Equally specific. Being clear about who isn't for them makes who is for them more confident.]
-
-**What their audience believes before finding them:**
-[What assumptions, frustrations, or questions does their ideal person show up with?]
-
-**What their audience believes after engaging with them:**
-[The shift. What changes?]
+**Key lines (verbatim):**
+- "[Quote]"
+- "[Quote]"
+- "[Quote]"
 
 ---
 
-## What Makes Them Different
+## 3. Core Beliefs
 
-**vs. Generic advice in their space:**
-[What they do differently]
+[For each belief:]
 
-**vs. The mainstream approach:**
-[Where they diverge]
-
-**The unfair advantage:**
-[What about their background, experience, or perspective gives them something others can't replicate?]
+**Belief:** [Statement in their words]
+**Origin:** [Where it came from]
+**Framework name (if any):** [The name they gave it]
 
 ---
 
-## Signature Hot Takes (Top 3)
-The opinions they hold publicly that create a point of view.
+## 4. Original Frameworks & IP
 
-1. [Take — written as a punchy, declarative statement]
-2. [Take]
-3. [Take]
+[For each framework:]
 
----
-
-## Voice Guide (Summary)
-Full guide lives in `data/voice_patterns.md`. Key notes:
-
-- **Sounds like:** [1-sentence description]
-- **Always:** [Voice rule 1]
-- **Never:** [Voice rule 2]
-- **Signature phrases:** [2–3 phrases]
-- **Tone:** [2–3 descriptors]
+**Name:** [Framework name]
+**Definition:** [What it is in one sentence]
+**The diagnosis:** [What it identifies]
+**The fix:** [What the opposite looks like]
+**Key line:** "[The line that closes it]"
 
 ---
 
-## The Brand in One Page — Quick Reference
+## 5. Hot Takes
+
+[List all confirmed takes, status noted]
+
+1. "[Take]" — [Ready / Needs sharpening]
+2. "[Take]" — [Ready / Needs sharpening]
+...
+
+---
+
+## 6. Voice Guide
+
+**Sounds like:** [One sentence]
+
+**Always:**
+- [Rule]
+- [Rule]
+- [Rule]
+
+**Never:**
+- [Word/phrase to avoid]
+- [Word/phrase to avoid]
+
+**Signature phrases:**
+- "[Phrase]"
+- "[Phrase]"
+- "[Phrase]"
+
+---
+
+## 7. Audience
+
+**For:** [Specific person with a specific situation]
+**Not for:** [Equally specific]
+**What they believe before finding [Name]:** [Their starting assumption]
+**What they believe after:** [The shift]
+
+---
+
+## 8. Differentiation
+
+**vs. [competitor type 1]:** [How Marc is different]
+**vs. [competitor type 2]:** [How Marc is different]
+**The unfair advantage:** [What about their background can't be replicated]
+
+---
+
+## 9. Tools & Stack (if captured)
+
+[From rapidfire sessions]
+
+---
+
+## 10. Content Pillars
+
+1. **[Pillar name]** — [One sentence description]
+2. **[Pillar name]** — [One sentence description]
+3. **[Pillar name]** — [One sentence description]
+4. **[Pillar name]** — [One sentence description]
+
+---
+
+## 11. What to Avoid
+
+- [Specific positioning mistake]
+- [Word/framing to never use]
+- [Common trap in their space to avoid]
+
+---
+
+## Quick Reference Card
 
 | Element | Content |
 |---------|---------|
 | One-liner | |
 | Core idea | |
-| Origin hook (1 sentence) | |
+| Origin hook | |
 | Top belief | |
+| Signature framework | |
 | Top take | |
-| Audience (1 sentence) | |
+| Audience | |
 | Sounds like | |
 | Never says | |
+```
 
 ---
 
-## What's Still Missing
-[Honest assessment — what hasn't been covered, what's still vague, what to run next.]
+## Notion Push (Optional)
 
-## Recommended Next Steps
-- [Specific skill or action]
-- [Specific skill or action]
+If Notion is configured in `config/settings.js`, after writing the doc run:
+```bash
+node index.js brand-doc
 ```
+This calls `brand_guide/docs/brandOutline.js` which pushes the full outline to the Notion database.
+
+---
 
 ## Closing
 
-After delivering the snapshot:
+After delivering the doc:
+> "That's your Brand Outline. This governs everything — every post, every pitch, every piece of content. Read it slowly and tell me what sounds wrong. One thing off here affects everything downstream."
 
-> "That's your brand snapshot. This is the document that should govern every piece of content you create. Read it slowly — not to look for mistakes, but to see if it sounds like the person you want to be. If it does, we're in good shape. If something's off, tell me what and we'll fix it."
-
-Print the Quick Reference table and tell them to keep it somewhere visible.
+Tell them what's missing and what to run next.

@@ -2,105 +2,81 @@
  * competitors.js
  * Skill: Research and map out the competitive landscape.
  *
- * Scrapes and researches multiple competitors to identify content gaps,
- * positioning opportunities, and differentiation strategies.
+ * Accepts competitor social media URLs, scrapes their profiles and most viral
+ * posts via ScapeCreators, then supplements with Tavily web research to build
+ * a full competitor intelligence report.
  */
 
-import { scrapeProfile, scrapePosts } from "../utils/scraper.js";
+import { parseProfileUrl, scrapeProfile, scrapeViralPosts } from "../utils/scraper.js";
 import { researchCompetitor } from "../utils/researcher.js";
 
 /**
- * Analyze a single competitor.
- * @param {string} platform
- * @param {string} handle
- * @param {string} name   - display name for research
+ * Analyze a single competitor from a profile URL.
+ * @param {string} url - full social media profile URL
+ * @param {string} name - display name for research
  * @returns {Promise<object>}
  */
-export async function analyzeCompetitor(platform, handle, name) {
-  console.log(`  Analyzing competitor: @${handle} (${name})`);
+export async function analyzeCompetitorFromUrl(url, name) {
+  const parsed = parseProfileUrl(url);
+  if (!parsed) {
+    console.warn(`  Could not parse URL: ${url}`);
+    return null;
+  }
 
-  const [profile, posts, webData] = await Promise.all([
+  const { platform, handle } = parsed;
+  console.log(`  Analyzing competitor: @${handle} on ${platform} (${name})`);
+
+  const [profile, viralPosts, webData] = await Promise.all([
     scrapeProfile(platform, handle),
-    scrapePosts(platform, handle, 30),
+    scrapeViralPosts(platform, handle, 50, 15),
     researchCompetitor(name),
   ]);
-
-  const allPosts = posts?.data || posts || [];
 
   return {
     name,
     platform,
     handle,
-    followers: profile?.followers || profile?.followerCount || "N/A",
+    url,
+    followers: profile?.followers || profile?.followerCount || profile?.subscriberCount || "N/A",
     bio: profile?.bio || profile?.description || "",
-    avgEngagement: calculateAvgEngagement(allPosts),
-    topContentTypes: detectContentTypes(allPosts),
-    postingFrequency: estimateFrequency(allPosts),
     webInsights: {
       summary: webData?.answer || "",
       sources: webData?.results?.slice(0, 3).map((r) => ({ title: r.title, url: r.url })) || [],
     },
-    recentPosts: allPosts.slice(0, 5),
+    viralPosts: viralPosts.map((post) => ({
+      url: post.url,
+      caption: post.caption,
+      type: post.type,
+      videoUrl: post.videoUrl,
+      likes: post.likes,
+      comments: post.comments,
+      views: post.views,
+      shares: post.shares,
+      engagement: post.engagement,
+      date: post.date,
+      // Extract the hook — first line or first 120 chars of caption
+      hook: post.caption ? post.caption.split("\n")[0].slice(0, 120).trim() : "",
+    })),
   };
 }
 
 /**
- * Analyze multiple competitors and produce a comparison report.
- * @param {string} platform
- * @param {Array<{handle: string, name: string}>} competitors
+ * Analyze multiple competitors from URLs and produce a comparison report.
+ * @param {Array<{url: string, name: string}>} competitors
  * @returns {Promise<object>}
  */
-export async function analyzeCompetitors(platform, competitors) {
-  console.log(`\n[Competitors] Analyzing ${competitors.length} competitors on ${platform}...`);
+export async function analyzeCompetitors(competitors) {
+  console.log(`\n[Competitors] Analyzing ${competitors.length} competitors...`);
 
-  const analyses = await Promise.all(
-    competitors.map(({ handle, name }) => analyzeCompetitor(platform, handle, name))
+  const results = await Promise.all(
+    competitors.map(({ url, name }) => analyzeCompetitorFromUrl(url, name))
   );
+
+  const analyses = results.filter(Boolean);
 
   return {
     skill: "competitors",
-    platform,
     totalAnalyzed: analyses.length,
     competitors: analyses,
-    template: {
-      marketGaps: "[Fill in: what topics/angles are underserved in this space?]",
-      differentiators: "[Fill in: how does our brand stand apart from each competitor?]",
-      contentOpportunities: "[Fill in: content styles or formats competitors aren't using?]",
-      audienceOverlap: "[Fill in: shared audience segments]",
-      positioningStatement: "[Fill in: one-line statement on how we position vs. competitors]",
-    },
   };
-}
-
-// ─── Helpers ─────────────────────────────────────────────────────────────────
-
-function calculateAvgEngagement(posts) {
-  if (!posts.length) return 0;
-  const total = posts.reduce((sum, p) => {
-    const likes = p.likes || p.likesCount || 0;
-    const comments = p.comments || p.commentsCount || 0;
-    return sum + likes + comments;
-  }, 0);
-  return Math.round(total / posts.length);
-}
-
-function detectContentTypes(posts) {
-  const types = {};
-  posts.forEach((p) => {
-    const type = p.type || p.contentType || (p.videoUrl ? "video" : p.imageUrl ? "image" : "text");
-    types[type] = (types[type] || 0) + 1;
-  });
-  return types;
-}
-
-function estimateFrequency(posts) {
-  if (posts.length < 2) return "Unknown";
-  const sorted = posts
-    .map((p) => new Date(p.createdAt || p.timestamp || p.date))
-    .filter((d) => !isNaN(d))
-    .sort((a, b) => b - a);
-  if (sorted.length < 2) return "Unknown";
-  const daysDiff = (sorted[0] - sorted[sorted.length - 1]) / (1000 * 60 * 60 * 24);
-  const postsPerDay = (sorted.length / daysDiff).toFixed(2);
-  return `~${postsPerDay} posts/day`;
 }

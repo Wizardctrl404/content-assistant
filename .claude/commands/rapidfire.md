@@ -1,98 +1,114 @@
 # /rapidfire — Adaptive RapidFire Q&A
 
 ## Purpose
-Fast-paced, instinct-driven question session. Claude selects 15–20 questions from the master bank based on the user's profile, industry, and gaps. The goal is to surface raw, unfiltered answers — the kind of material that only comes out when someone doesn't have time to overthink.
+Fast-paced, instinct-driven Q&A. Selects 5–10 questions from the 200+ question bank based on the user's profile and gaps. Then runs a niche sub-flow that uses live research to surface controversial topics in their space and asks their take.
 
 ## Before Starting
-1. Read `USER_PROFILE.md`. If it doesn't exist or is empty, stop and say: "Run `/intake` first — I need your profile to pick the right questions."
+1. Read `USER_PROFILE.md`. If missing, stop: "Run `/intake` first."
 2. Read `questions.md` in full.
-3. Read `data/rapidfire_answers.md` if it exists — do not re-ask questions already answered.
-4. Read `data/origin_notes.md`, `data/hot_takes.md`, and `data/beliefs.md` to understand what's already been covered.
+3. Read `data/rapidfire_answers.md` — never re-ask answered questions.
+4. Read `data/hot_takes.md`, `data/beliefs.md`, `data/origin_notes.md` — know what's covered.
 
 ## Question Selection Logic
 
-From the 160-question bank, select 15–20 questions using this logic:
+Select **5–10 questions** from the bank:
 
 **Must include at least:**
-- 3 questions from the user's specific industry/expertise category
-- 2 contrarian/provocative questions
-- 2 belief questions
-- 2 identity questions
-- 1 wildcard
+- 2 questions from their specific industry/niche
+- 1 tools or software question
+- 1 habits or workflow question
+- 1 contrarian or belief question
 
 **Prioritize:**
 - Categories where USER_PROFILE.md shows gaps
-- Questions likely to produce quotable, specific, or emotionally resonant answers based on what you know about this person
-- Questions that surface instincts they haven't had a chance to articulate yet
+- Questions likely to produce quotable, specific answers given what you already know
+- Tools/software questions if that data hasn't been captured yet
 
 **Avoid:**
 - Questions already answered in any data file
 - Questions too similar to each other
-- Questions that require long, reflective answers (save those for /origin-story or /belief-mining)
+- Questions that need long reflection (save for `/origin-story` or `/belief-mining`)
 
-Lock in your 15–20 questions before starting. Do not deviate mid-session unless an answer opens a door that demands a follow-up.
+Lock your 5–10 before starting. Don't change mid-session unless an answer opens something critical.
 
-## Your Role
-You are a fast, curious interviewer. The energy is quick but not sloppy. You want first instinct, not best answer. If someone starts to hedge or over-explain, bring them back: "First instinct — go."
+---
 
-## Conversation Flow
+## Part 1 — RapidFire Questions
 
 ### Opening
-> "RapidFire. I've picked [X] questions based on your profile. One at a time, fast pace. Don't overthink — I want your first instinct, not your best answer. If you don't know, say 'pass' and we move on. Ready?"
+> "RapidFire — two parts. First, [X] quick questions. Then I'm looking up what's actually being debated in your space right now and getting your take. Fast pace. First instinct, not best answer. Ready?"
 
-Then begin immediately with question 1.
+Ask questions one at a time. After each:
+- Move on (most of the time)
+- One follow-up if the answer is genuinely interesting: "Say more." / "Give me an example."
+- Flag it: "That's one we're coming back to."
 
-### During the Session
+Never summarize. Never give feedback. Keep momentum.
 
-- Ask one question at a time.
-- After each answer, do ONE of the following:
-  - Move to the next question (most of the time)
-  - Ask one follow-up if the answer is genuinely interesting, surprising, or half-finished: "Say more." / "What do you mean by that?" / "Give me an example."
-  - Flag it: "That's a strong one — we're coming back to this in /origin-story [or /belief-mining, etc.]."
-- Do NOT give feedback on answers mid-session.
-- Do NOT summarize or recap.
-- Keep momentum. The pace is the point.
+---
 
-### Tracking Flags
-Internally note which answers were:
-- **Gold** — genuinely compelling, quotable, or reveals something important
-- **Needs depth** — interesting but surface-level, needs a follow-up session
-- **Unexpected** — contradicts or complicates their profile
+## Part 2 — Niche Sub-Flow (Live Research)
 
-### Closing
+After the rapid-fire questions, transition:
 
-After the final question:
+> "Good. Now the live part — I'm looking up what's actually being debated in [their niche/industry] right now."
 
-1. Pause. Let them know you're done.
-2. Read back the **3–5 most compelling answers** — the ones you flagged as gold. Say: "Here's what stood out."
-3. Tell them which skills to run next to go deeper on what surfaced.
-4. Write all answers to `data/rapidfire_answers.md` (append if file exists).
-5. Update `USER_PROFILE.md` with anything new learned.
+### Research Step
+Use the WebSearch tool to run these searches:
+1. `[niche] controversial opinions [current year]`
+2. `[niche] most debated topics reddit`
+3. `[niche] hot takes [current year]`
+
+From the results, extract 3–5 genuinely controversial or contested topics currently circulating in their space. Use real, specific debates — not generic industry platitudes.
+
+### Present & Probe
+For each topic (pick the 3 most interesting):
+
+> "This is actually being debated in your space right now: [State the controversy as a direct, clear position]. Where do you land on this?"
+
+After their answer:
+- "Why?" — minimum one follow-up
+- If strong: "Say it cleaner. That's publishable."
+- If hedged: "That's the diplomatic answer. What do you actually think?"
+
+---
+
+## Closing
+
+1. Read back the **3 strongest answers** from both parts.
+2. Tell them which are ready to use and which need depth.
+3. Write all answers to `data/rapidfire_answers.md`.
+4. Update `USER_PROFILE.md` with any new tool/software/habit data captured.
 
 ## Output Format — data/rapidfire_answers.md
 
-Append the following block after each session:
+Append after each session:
 
 ```
 ## RapidFire Session — [Date]
 
-**Q:** [Question]
-**A:** [Their answer verbatim or close to it]
-[GOLD / NEEDS DEPTH / UNEXPECTED — if flagged]
+### Part 1 — Questions
 
 **Q:** [Question]
-**A:** [Answer]
-...
+**A:** [Answer verbatim or close]
+[GOLD / NEEDS DEPTH — if flagged]
+
+### Part 2 — Niche Topics
+
+**Topic:** [The controversy]
+**Position:** [Where they landed]
+**Reasoning:** [Their answer]
+[Status: Ready / Needs sharpening]
 
 ### Session Highlights
-- [Top 3–5 answers worth developing further]
+- [Top 3 answers worth developing]
 
-### Recommended Next Skills
-- [Based on what surfaced]
+### New Data Captured
+- Tools/software: [anything new]
+- Habits/workflow: [anything new]
 ```
 
 ## Tone Notes
 - Fast but not cold.
-- Curious, not interrogating.
-- When something's good, say it plainly: "That's the one."
+- "That's the one." — say it when something lands.
 - Never say "Great answer!" — just move or probe.

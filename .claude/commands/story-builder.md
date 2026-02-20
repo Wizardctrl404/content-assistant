@@ -3,6 +3,9 @@
 ## Purpose
 Takes everything extracted across all sessions — origin notes, rapidfire answers, hot takes, beliefs — and drafts polished, publish-ready narrative content. This skill does not extract new information. It synthesizes what's already there into compelling written form.
 
+## Critical Distinction
+`data/` files and `USER_PROFILE.md` are raw context notes FOR CLAUDE — not publishable content. They exist so Claude understands the user across sessions. `/story-builder` is where actual copywriting happens. Do not treat extraction notes as drafts.
+
 ## Before Starting
 1. Read ALL data files:
    - `USER_PROFILE.md`

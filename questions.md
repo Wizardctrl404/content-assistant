@@ -223,3 +223,58 @@
 158. If you had to teach a class on anything — not related to your work — what would it be?
 159. What's the thing that happened in your personal life that made you better professionally?
 160. What's the thing you know about people — about human nature — that you learned from doing this work?
+
+---
+
+## Category: Tools & Software
+
+161. What's the one tool you'd keep if you had to cut everything else?
+162. What tool do you swear by that most people in your space haven't discovered yet?
+163. What popular tool in your space is overhyped — and what do you use instead?
+164. What's the stack you'd recommend to someone starting from scratch today?
+165. What tool did you resist for too long before finally switching to it?
+166. What's the most underrated integration or combination of tools you use?
+167. What does your workflow look like on a normal workday — walk me through the tools you open first?
+168. What tool have you tried and abandoned — and why?
+169. Is there a tool you built yourself because nothing on the market did what you needed?
+170. What's the thing you still do manually that you know you should automate?
+171. What software decision cost you the most time or money before you figured it out?
+172. What tool do your clients always push back on — and do you stand your ground?
+173. What's the first tool you'd tell a new client to set up before anything else?
+174. What's the tool you use that would surprise people who know your work?
+175. If your entire stack disappeared tomorrow, what would you rebuild first?
+
+---
+
+## Category: Habits & Workflow
+
+176. What's the first thing you do when you sit down to work — before you open anything?
+177. What does your best work day look like from start to finish?
+178. What does your worst work day look like — and what causes it?
+179. What habit took you the longest to build — and what changed when you did?
+180. What do you do when you're stuck on a problem that won't solve itself?
+181. What's the thing you do every week that most people would call a waste of time?
+182. What's the routine or ritual that protects your best thinking?
+183. How do you decide what to work on first when everything feels urgent?
+184. What's the boundary you've set around your work that you won't negotiate on?
+185. What do you do in the first 30 minutes of your day?
+186. What do you never do before noon — or after a certain time?
+187. What does your workspace need to look like for you to do your best work?
+188. How do you handle the days when motivation isn't there?
+189. What's the habit you dropped that you thought was essential — and didn't miss?
+190. What does winding down from work actually look like for you?
+
+---
+
+## Category: Process & Systems Thinking
+
+191. Walk me through how you take on a new client — step one to first delivery.
+192. What does your onboarding process look like and why is it set up that way?
+193. What's the part of your process that clients never see but makes everything else work?
+194. Where does most new work come from — and is that by design or accident?
+195. What's the system you're most proud of that you've built for yourself?
+196. What does quality control look like in your work — how do you know when something's done?
+197. What's the thing you systematized that used to drain you every time?
+198. What part of your business still doesn't have a system — and why not?
+199. How do you handle scope creep — what's the line and how do you hold it?
+200. What's the process you'd never outsource, no matter how big you get?

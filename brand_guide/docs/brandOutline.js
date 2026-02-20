@@ -79,14 +79,41 @@ export async function writeBrandOutlineToNotion(brandData) {
     ]),
     divider(),
 
-    // 5. Rapid Fire Q&A
-    heading2("5. Rapid Fire Q&A"),
+    // 5. Original Frameworks & IP
+    heading2("5. Original Frameworks & IP"),
+    ...bulletList(
+      (brandData.frameworks || []).length > 0
+        ? brandData.frameworks.map(f => `${f.name}: ${f.definition}`)
+        : ["No frameworks captured yet — run /belief-mining."]
+    ),
+    divider(),
+
+    // 6. Hot Takes
+    heading2("6. Hot Takes"),
+    ...bulletList(
+      (brandData.hotTakes || []).length > 0
+        ? brandData.hotTakes
+        : ["No hot takes captured yet — run /hot-takes."]
+    ),
+    divider(),
+
+    // 7. Voice Guide
+    heading2("7. Voice Guide"),
+    ...bulletList([
+      `Sounds like: ${brandData.voice?.soundsLike || "TBD"}`,
+      `Always: ${brandData.voice?.always || "TBD"}`,
+      `Never: ${brandData.voice?.never || "TBD"}`,
+      `Signature phrases: ${(brandData.voice?.signaturePhrases || []).join(" / ") || "TBD"}`,
+    ]),
+    divider(),
+
+    // 8. Rapid Fire Q&A
+    heading2("8. Rapid Fire Q&A"),
     paragraph(`Total questions captured: ${rapidFireQA?.totalQuestions || 0}`),
-    heading2("Sample Questions from Audience"),
     ...bulletList(
       (rapidFireQA?.questionsFromComments || []).slice(0, 8).length > 0
         ? (rapidFireQA?.questionsFromComments || []).slice(0, 8)
-        : ["No questions captured yet — run the rapid-fire skill first."]
+        : ["No questions captured yet — run /rapidfire."]
     ),
     divider(),
 

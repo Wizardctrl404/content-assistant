@@ -33,8 +33,9 @@ const BRAND = {
   handle: "yourhandle",          // without @
   niche: "Your niche here",      // e.g. "business coaching for entrepreneurs"
   competitors: [
-    { handle: "competitor1", name: "Competitor One" },
-    { handle: "competitor2", name: "Competitor Two" },
+    // Now accepts full profile URLs — platform and handle are auto-detected
+    { url: "https://www.instagram.com/competitor1/", name: "Competitor One" },
+    { url: "https://www.instagram.com/competitor2/", name: "Competitor Two" },
   ],
 };
 // ─────────────────────────────────────────────────────────────────────────────
@@ -77,7 +78,7 @@ async function run() {
       break;
 
     case "competitors":
-      competitors = await analyzeCompetitors(BRAND.platform, BRAND.competitors);
+      competitors = await analyzeCompetitors(BRAND.competitors);
       console.log("\nResult:", JSON.stringify(competitors, null, 2));
       break;
 
@@ -101,7 +102,7 @@ async function run() {
       break;
 
     case "competitor-doc":
-      competitors = await analyzeCompetitors(BRAND.platform, BRAND.competitors);
+      competitors = await analyzeCompetitors(BRAND.competitors);
       await writeAllCompetitorsToNotion(competitors);
       break;
 
@@ -116,7 +117,7 @@ async function run() {
           mapKnowledge(BRAND.platform, BRAND.handle, BRAND.niche),
           buildRapidFireQA(BRAND.platform, BRAND.handle),
           analyzeNiche(BRAND.platform, BRAND.handle, BRAND.niche),
-          analyzeCompetitors(BRAND.platform, BRAND.competitors),
+          analyzeCompetitors(BRAND.competitors),
         ]);
 
       console.log("\n All skills complete. Writing docs to Notion...\n");

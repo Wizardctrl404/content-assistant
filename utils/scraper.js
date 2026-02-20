@@ -53,3 +53,78 @@ export async function scrapeComments(platform, postId) {
   });
   return data;
 }
+
+/**
+ * Parse a social media profile URL into platform + handle.
+ * Supports: Instagram, TikTok, Twitter/X, LinkedIn, YouTube
+ * @param {string} url - full profile URL
+ * @returns {{ platform: string, handle: string } | null}
+ */
+export function parseProfileUrl(url) {
+  try {
+    const u = new URL(url.trim());
+    const host = u.hostname.replace("www.", "");
+    const parts = u.pathname.replace(/^\//, "").replace(/\/$/, "").split("/");
+
+    if (host === "instagram.com") {
+      return { platform: "instagram", handle: parts[0].replace("@", "") };
+    }
+    if (host === "tiktok.com") {
+      return { platform: "tiktok", handle: parts[0].replace("@", "") };
+    }
+    if (host === "twitter.com" || host === "x.com") {
+      return { platform: "twitter", handle: parts[0].replace("@", "") };
+    }
+    if (host === "linkedin.com" && parts[0] === "in") {
+      return { platform: "linkedin", handle: parts[1] };
+    }
+    if (host === "youtube.com") {
+      const handle = parts[0].startsWith("@") ? parts[0].replace("@", "") : parts[1];
+      return { platform: "youtube", handle };
+    }
+    return null;
+  } catch {
+    return null;
+  }
+}
+
+/**
+ * Scrape and rank a creator's most viral posts by engagement.
+ * @param {string} platform
+ * @param {string} handle
+ * @param {number} limit - posts to fetch (default 50)
+ * @param {number} topN  - how many viral posts to return (default 15)
+ * @returns {Promise<object[]>} top posts sorted by engagement
+ */
+export async function scrapeViralPosts(platform, handle, limit = 50, topN = 15) {
+  const posts = await scrapePosts(platform, handle, limit);
+  const allPosts = posts?.data || posts || [];
+
+  const ranked = allPosts
+    .map((post) => {
+      const likes = post.likes || post.likesCount || post.likeCount || 0;
+      const comments = post.comments || post.commentsCount || post.commentCount || 0;
+      const views = post.views || post.viewCount || post.playCount || 0;
+      const shares = post.shares || post.shareCount || 0;
+      const engagement = likes + comments * 2 + shares * 3;
+
+      return {
+        id: post.id || post.postId,
+        url: post.url || post.postUrl || post.link || null,
+        caption: post.text || post.caption || post.content || post.description || "",
+        type: post.type || post.contentType || (post.videoUrl ? "video" : post.imageUrl ? "image" : "text"),
+        videoUrl: post.videoUrl || null,
+        imageUrl: post.imageUrl || null,
+        likes,
+        comments,
+        views,
+        shares,
+        engagement,
+        date: post.createdAt || post.timestamp || post.date || null,
+      };
+    })
+    .sort((a, b) => b.engagement - a.engagement)
+    .slice(0, topN);
+
+  return ranked;
+}
