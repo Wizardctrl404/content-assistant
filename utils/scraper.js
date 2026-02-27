@@ -107,11 +107,13 @@ export async function scrapeViralPosts(platform, handle, limit = 50, topN = 15) 
       const views = post.views || post.viewCount || post.playCount || 0;
       const shares = post.shares || post.shareCount || 0;
       const engagement = likes + comments * 2 + shares * 3;
+      const caption = post.text || post.caption || post.content || post.description || "";
 
       return {
         id: post.id || post.postId,
         url: post.url || post.postUrl || post.link || null,
-        caption: post.text || post.caption || post.content || post.description || "",
+        caption,
+        hook: caption.split(/[.!?\n]/)[0].trim() || "",
         type: post.type || post.contentType || (post.videoUrl ? "video" : post.imageUrl ? "image" : "text"),
         videoUrl: post.videoUrl || null,
         imageUrl: post.imageUrl || null,
@@ -123,8 +125,75 @@ export async function scrapeViralPosts(platform, handle, limit = 50, topN = 15) 
         date: post.createdAt || post.timestamp || post.date || null,
       };
     })
-    .sort((a, b) => b.engagement - a.engagement)
+    .sort((a, b) => b.views - a.views)
     .slice(0, topN);
 
   return ranked;
+}
+
+/**
+ * Get related/suggested accounts from an Instagram profile.
+ * Uses the ScapeCreators Instagram profile endpoint which returns
+ * related accounts alongside profile data.
+ * @param {string} handle - Instagram username without @
+ * @returns {Promise<object[]>} array of related account objects
+ */
+export async function getRelatedAccounts(handle) {
+  const { data } = await client.get("/instagram/profile", {
+    params: { username: handle },
+  });
+
+  const related = data?.related_profiles
+    || data?.edge_related_profiles?.edges?.map((e) => e.node)
+    || data?.relatedAccounts
+    || data?.suggestedUsers
+    || [];
+
+  return related.map((account) => ({
+    handle: account.username || account.handle || "",
+    fullName: account.full_name || account.name || "",
+    bio: account.biography || account.bio || "",
+    followers: account.follower_count || account.followersCount || account.followers || 0,
+    postCount: account.media_count || account.postsCount || account.postCount || 0,
+    category: account.category || account.businessCategory || "",
+    profileUrl: `https://instagram.com/${account.username || account.handle || ""}`,
+  }));
+}
+
+/**
+ * Scrape up to 50 posts from a creator sorted by view count descending.
+ * Returns full metadata needed for competitor deep-dive.
+ * @param {string} handle - Instagram username
+ * @param {number} limit - posts to fetch (default 50)
+ * @returns {Promise<object[]>} posts sorted by views
+ */
+export async function scrapePostsByViews(handle, limit = 50) {
+  const posts = await scrapePosts("instagram", handle, limit);
+  const allPosts = posts?.data || posts || [];
+
+  return allPosts
+    .map((post) => {
+      const caption = post.text || post.caption || post.content || post.description || "";
+      const transcript = post.transcript || post.transcription || post.subtitles || post.speechText || "";
+      const views = post.views || post.viewCount || post.playCount || 0;
+      const likes = post.likes || post.likesCount || post.likeCount || 0;
+      const comments = post.comments || post.commentsCount || post.commentCount || 0;
+      // Use spoken transcript for hook if available, otherwise fall back to caption
+      const hookSource = transcript || caption;
+
+      return {
+        id: post.id || post.postId,
+        url: post.url || post.postUrl || post.link || null,
+        videoUrl: post.videoUrl || null,
+        caption,
+        transcript,
+        hook: hookSource.split(/[.!?\n]/)[0].trim() || "",
+        views,
+        likes,
+        comments,
+        date: post.createdAt || post.timestamp || post.date || null,
+        type: post.type || (post.videoUrl ? "video" : "image"),
+      };
+    })
+    .sort((a, b) => b.views - a.views);
 }

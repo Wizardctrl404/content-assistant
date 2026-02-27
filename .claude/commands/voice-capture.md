@@ -1,27 +1,59 @@
-# /voice-capture — Voice Pattern Analysis & Style Guide
+# /voice-capture -Voice Pattern Analysis & Style Guide
 
 ## Purpose
-Analyzes the user's actual language from their sessions — not how they want to sound, how they actually sound. Builds a voice guide with real examples so that any content generated in this system sounds like them, not like Claude.
+Analyzes the user's actual language from their sessions -not how they want to sound, how they actually sound. Builds a voice guide with real examples so that any content generated in this system sounds like them, not like Claude.
 
 ## Before Starting
-1. Read ALL data files that contain the user's actual words:
+1. Read `USER_PROFILE.md` -check if an Instagram handle is captured.
+2. Read ALL data files that contain the user's actual words:
    - `data/rapidfire_answers.md`
    - `data/origin_notes.md`
    - `data/hot_takes.md`
    - `data/beliefs.md`
-2. Read `USER_PROFILE.md` — what they said about their own voice in intake.
-3. You need at least 2 sessions of data to do this well. If the data files are thin, tell the user: "We don't have enough raw material yet — run a few more sessions first. I'd suggest `/rapidfire` or `/origin-story`."
+3. You need at least 2 sessions of data to do this well. If the data files are thin, tell the user: "We don't have enough raw material yet -run a few more sessions first. I'd suggest `/rapidfire` or `/origin-story`."
+
+## Step 0 -Fetch Their Instagram Content (Run First)
+
+Before analyzing session data, get their actual published voice. This is more accurate than anything extracted in conversation.
+
+Ask:
+> "What's your Instagram handle? I want to pull your actual posts before we analyze anything -your published voice is more reliable than what you say about your voice."
+
+If they give a handle, run:
+```bash
+node -e "
+import('./utils/scraper.js').then(({ scrapeProfile, scrapeViralPosts }) =>
+  Promise.all([
+    scrapeProfile('instagram', '[handle]'),
+    scrapeViralPosts('instagram', '[handle]', 30, 20)
+  ]).then(([profile, posts]) => console.log(JSON.stringify({ profile, posts }, null, 2)))
+)"
+```
+
+From the returned posts, extract:
+- Their actual captions verbatim (especially the first 1-2 sentences of each)
+- Recurring phrases or words across posts
+- Sentence length patterns
+- How they open posts vs. how they close them
+- What they emphasize (numbers, stories, questions, commands)
+- What they never do (exclamation marks, long disclaimers, etc.)
+
+If they have no Instagram yet or don't want to share, skip this step and proceed with session data only. Note in the voice guide that it was built from conversation data, not published content.
 
 ## Your Role
 You are a voice analyst and style editor. You listen for patterns: the words they reach for, the sentence structures they use naturally, how they open a thought, how they close one, what they emphasize, what they understate, what they're never without.
 
-You're building a fingerprint — something specific enough that a future version of you (or a ghostwriter) could write something and have someone say "yeah, that sounds like them."
+You're building a fingerprint -something specific enough that a future version of you (or a ghostwriter) could write something and have someone say "yeah, that sounds like them."
 
 ## Analysis Process
 
-### Step 1 — Gather Raw Material
+### Step 1 -Gather Raw Material
 
-From all data files, collect:
+Pull from two sources in this order:
+1. **Instagram captions** (from Step 0) -real published voice, highest signal
+2. **Session data files** -raw conversational voice, strong signal
+
+From all sources, collect:
 - Direct quotes (verbatim answers)
 - Recurring phrases or words
 - How they started sentences
@@ -31,7 +63,7 @@ From all data files, collect:
 - Where they got specific vs. where they stayed vague
 - What they said vs. what they avoided saying
 
-### Step 2 — Pattern Recognition
+### Step 2 -Pattern Recognition
 
 Analyze for:
 
@@ -65,7 +97,7 @@ Analyze for:
 **What They're Never Without**
 - What element always shows up? (A disclaimer? A counterpoint? A personal anecdote? A "but here's the thing"?)
 
-### Step 3 — The Conversation
+### Step 3 -The Conversation
 
 After analysis, have a short conversation with the user to verify and fill gaps:
 
@@ -73,58 +105,58 @@ After analysis, have a short conversation with the user to verify and fill gaps:
 
 Ask 3–5 targeted questions based on what you observed. Examples:
 
-- "I notice you almost never use the word 'passionate' — is that intentional, or just coincidence?"
+- "I notice you almost never use the word 'passionate' -is that intentional, or just coincidence?"
 - "You said [specific phrase] three times across different sessions. Is that a phrase you use a lot?"
 - "When you explain something technical, you tend to use analogies. Is that conscious or just how you think?"
 - "Your answers tend to start slow and then land hard at the end. Is that how you write too, or is it different in text?"
 - "I noticed you got noticeably more specific when talking about [topic]. Is that a subject you care more about, or just one you know better?"
 
-### Step 4 — Build the Voice Guide
+### Step 4 -Build the Voice Guide
 
 Write a practical, specific voice guide. Not abstract. Real examples from their actual words.
 
-## Output Format — data/voice_patterns.md
+## Output Format -data/voice_patterns.md
 
 ```
-# Voice Guide — [User Name]
+# Voice Guide -[User Name]
 > Generated by /voice-capture on [Date]. Update as more session data accumulates.
 
 ## The One-Sentence Summary
-[Their voice in one sentence — e.g., "Direct and a little sharp, like someone who's figured something out and is being patient about explaining it."]
+[Their voice in one sentence -e.g., "Direct and a little sharp, like someone who's figured something out and is being patient about explaining it."]
 
 ## Vocabulary
 
 ### Words They Use (with frequency context)
-- "[word/phrase]" — [when and how they use it]
-- "[word/phrase]" — [when and how they use it]
+- "[word/phrase]" -[when and how they use it]
+- "[word/phrase]" -[when and how they use it]
 
 ### Words They Never Use
-- "[word]" — avoid
-- "[word]" — avoid
+- "[word]" -avoid
+- "[word]" -avoid
 
 ### Signature Phrases
-- "[phrase]" — appears in [contexts]
-- "[phrase]" — appears in [contexts]
+- "[phrase]" -appears in [contexts]
+- "[phrase]" -appears in [contexts]
 
 ## Sentence Structure
-- [Short and punchy / Long and winding / Mixed — explain when each appears]
+- [Short and punchy / Long and winding / Mixed -explain when each appears]
 - [Do they use fragments? When?]
 - [Do they use questions? What kind?]
 - [Do they hedge or commit?]
 
 ## Rhythm
 - [How they build a point]
-- [Where the punch lands — opening, middle, or end]
+- [Where the punch lands -opening, middle, or end]
 - [Their natural paragraph length]
 
 ## Tone
-- [Warm / Cool / Direct / Layered — be specific]
+- [Warm / Cool / Direct / Layered -be specific]
 - [How they handle humor]
 - [How they handle seriousness]
 - [How they express certainty vs. uncertainty]
 
 ## What They're Never Without
-- [The thing that always shows up — a qualifier, a counterpoint, a pivot, a personal anecdote]
+- [The thing that always shows up -a qualifier, a counterpoint, a pivot, a personal anecdote]
 
 ## Real Examples (Verbatim)
 These are actual lines from their sessions. Use as reference when writing in their voice.
@@ -140,7 +172,7 @@ These are actual lines from their sessions. Use as reference when writing in the
 - [Tones or structures that feel off]
 - [Words or phrases that are "Claude" not them]
 
-## Writing in This Voice — Quick Rules
+## Writing in This Voice -Quick Rules
 1. [Rule 1]
 2. [Rule 2]
 3. [Rule 3]
@@ -152,6 +184,6 @@ These are actual lines from their sessions. Use as reference when writing in the
 
 After delivering the voice guide:
 
-> "That's your voice guide — I'll use this in every session going forward. Two things: First, read through it and tell me anything that feels off. Second, the more sessions we do, the more accurate this gets. I'll update it automatically after `/origin-story`, `/rapidfire`, and `/belief-mining` sessions."
+> "That's your voice guide -I'll use this in every session going forward. Two things: First, read through it and tell me anything that feels off. Second, the more sessions we do, the more accurate this gets. I'll update it automatically after `/origin-story`, `/rapidfire`, and `/belief-mining` sessions."
 
-Update `USER_PROFILE.md` — Voice & Personality section with a summary.
+Update `USER_PROFILE.md` -Voice & Personality section with a summary.

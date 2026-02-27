@@ -1,4 +1,4 @@
-# /rapidfire — Adaptive RapidFire Q&A
+# /rapidfire -Adaptive RapidFire Q&A
 
 ## Purpose
 Fast-paced, instinct-driven Q&A. Selects 5–10 questions from the 200+ question bank based on the user's profile and gaps. Then runs a niche sub-flow that uses live research to surface controversial topics in their space and asks their take.
@@ -6,8 +6,8 @@ Fast-paced, instinct-driven Q&A. Selects 5–10 questions from the 200+ question
 ## Before Starting
 1. Read `USER_PROFILE.md`. If missing, stop: "Run `/intake` first."
 2. Read `questions.md` in full.
-3. Read `data/rapidfire_answers.md` — never re-ask answered questions.
-4. Read `data/hot_takes.md`, `data/beliefs.md`, `data/origin_notes.md` — know what's covered.
+3. Read `data/rapidfire_answers.md` -never re-ask answered questions.
+4. Read `data/hot_takes.md`, `data/beliefs.md`, `data/origin_notes.md` -know what's covered.
 
 ## Question Selection Logic
 
@@ -33,10 +33,10 @@ Lock your 5–10 before starting. Don't change mid-session unless an answer open
 
 ---
 
-## Part 1 — RapidFire Questions
+## Part 1 -RapidFire Questions
 
 ### Opening
-> "RapidFire — two parts. First, [X] quick questions. Then I'm looking up what's actually being debated in your space right now and getting your take. Fast pace. First instinct, not best answer. Ready?"
+> "RapidFire -two parts. First, [X] quick questions. Then I'm looking up what's actually being debated in your space right now and getting your take. Fast pace. First instinct, not best answer. Ready?"
 
 Ask questions one at a time. After each:
 - Move on (most of the time)
@@ -47,11 +47,11 @@ Never summarize. Never give feedback. Keep momentum.
 
 ---
 
-## Part 2 — Niche Sub-Flow (Live Research)
+## Part 2 -Niche Sub-Flow (Live Research)
 
 After the rapid-fire questions, transition:
 
-> "Good. Now the live part — I'm looking up what's actually being debated in [their niche/industry] right now."
+> "Good. Now the live part -I'm looking up what's actually being debated in [their niche/industry] right now."
 
 ### Research Step
 Use the WebSearch tool to run these searches:
@@ -59,7 +59,7 @@ Use the WebSearch tool to run these searches:
 2. `[niche] most debated topics reddit`
 3. `[niche] hot takes [current year]`
 
-From the results, extract 3–5 genuinely controversial or contested topics currently circulating in their space. Use real, specific debates — not generic industry platitudes.
+From the results, extract 3–5 genuinely controversial or contested topics currently circulating in their space. Use real, specific debates -not generic industry platitudes.
 
 ### Present & Probe
 For each topic (pick the 3 most interesting):
@@ -67,7 +67,7 @@ For each topic (pick the 3 most interesting):
 > "This is actually being debated in your space right now: [State the controversy as a direct, clear position]. Where do you land on this?"
 
 After their answer:
-- "Why?" — minimum one follow-up
+- "Why?" -minimum one follow-up
 - If strong: "Say it cleaner. That's publishable."
 - If hedged: "That's the diplomatic answer. What do you actually think?"
 
@@ -80,20 +80,20 @@ After their answer:
 3. Write all answers to `data/rapidfire_answers.md`.
 4. Update `USER_PROFILE.md` with any new tool/software/habit data captured.
 
-## Output Format — data/rapidfire_answers.md
+## Output Format -data/rapidfire_answers.md
 
 Append after each session:
 
 ```
-## RapidFire Session — [Date]
+## RapidFire Session -[Date]
 
-### Part 1 — Questions
+### Part 1 -Questions
 
 **Q:** [Question]
 **A:** [Answer verbatim or close]
-[GOLD / NEEDS DEPTH — if flagged]
+[GOLD / NEEDS DEPTH -if flagged]
 
-### Part 2 — Niche Topics
+### Part 2 -Niche Topics
 
 **Topic:** [The controversy]
 **Position:** [Where they landed]
@@ -110,5 +110,5 @@ Append after each session:
 
 ## Tone Notes
 - Fast but not cold.
-- "That's the one." — say it when something lands.
-- Never say "Great answer!" — just move or probe.
+- "That's the one." -say it when something lands.
+- Never say "Great answer!" -just move or probe.

@@ -1,7 +1,7 @@
-# /brand-snapshot — Brand Outline Doc
+# /brand-snapshot -Brand Outline Doc
 
 ## Purpose
-Compiles everything extracted across all sessions into a single Brand Outline Doc — the source of truth for positioning, voice, origin, beliefs, hot takes, frameworks, and audience. This is what gets handed to a designer, writer, or collaborator. Also pushes to Notion via `brandOutline.js` if configured.
+Compiles everything extracted across all sessions into a single Brand Outline Doc -the source of truth for positioning, voice, origin, beliefs, hot takes, frameworks, and audience. This is what gets handed to a designer, writer, or collaborator. Also pushes to Notion via `brandOutline.js` if configured.
 
 ## Before Starting
 1. Read ALL data files:
@@ -11,7 +11,7 @@ Compiles everything extracted across all sessions into a single Brand Outline Do
    - `data/hot_takes.md`
    - `data/beliefs.md`
    - `data/voice_patterns.md`
-   - `data/brand_snapshot.md` (existing — update, don't replace)
+   - `data/brand_snapshot.md` (existing -update, don't replace)
 2. Assess completeness. Tell the user what's missing and which skills to run first:
    - No origin → `/origin-story`
    - No beliefs → `/belief-mining`
@@ -28,10 +28,10 @@ Work through each section. Present one at a time, get quick confirmation, then m
 
 ---
 
-## Output — data/brand_outline.md
+## Output -data/brand_outline.md
 
 ```
-# Brand Outline — [Name]
+# Brand Outline -[Name]
 > [Role / Company]
 > Last updated: [Date]
 
@@ -43,7 +43,7 @@ Work through each section. Present one at a time, get quick confirmation, then m
 [The guy/person who does X for Y]
 
 **One-liner:**
-[Full one-sentence positioning — who + what + for whom]
+[Full one-sentence positioning -who + what + for whom]
 
 **The core idea:**
 [2–3 sentences. The central tension or problem they solve. Written in plain language, not marketing-speak.]
@@ -53,13 +53,13 @@ Work through each section. Present one at a time, get quick confirmation, then m
 ## 2. Origin Story
 
 **The hook:**
-[The most compelling specific moment — one sentence]
+[The most compelling specific moment -one sentence]
 
 **The before:**
 [Who they were, what they assumed their life would look like]
 
 **The turning point:**
-[What happened — specific, not general]
+[What happened -specific, not general]
 
 **The proof point:**
 [First real win. The moment it became undeniable.]
@@ -100,8 +100,8 @@ Work through each section. Present one at a time, get quick confirmation, then m
 
 [List all confirmed takes, status noted]
 
-1. "[Take]" — [Ready / Needs sharpening]
-2. "[Take]" — [Ready / Needs sharpening]
+1. "[Take]" -[Ready / Needs sharpening]
+2. "[Take]" -[Ready / Needs sharpening]
 ...
 
 ---
@@ -128,10 +128,20 @@ Work through each section. Present one at a time, get quick confirmation, then m
 
 ## 7. Audience
 
-**For:** [Specific person with a specific situation]
-**Not for:** [Equally specific]
-**What they believe before finding [Name]:** [Their starting assumption]
-**What they believe after:** [The shift]
+**For:** [Specific person -stage of business, situation they are in, what is breaking for them right now]
+
+**Not for:** [Pull this from intake Q5 and any client stories that surfaced in sessions. This should be a real type of person, not a vibe. What specific belief, behavior, or situation makes someone the wrong fit? Who have they turned down or regretted working with?]
+
+If the "not for" answer in the data is vague or missing, ask one question before writing this section:
+> "Who specifically is the wrong fit for you? Not a personality type -what situation are they in, or what do they believe, that makes your work pointless for them?"
+
+Do not write "people who aren't ready to invest" or "people who don't take action." That is filler. Get the real answer.
+
+**What they believe when they find [Name]:**
+[Their starting assumption -what wrong diagnosis are they operating under?]
+
+**What they believe after:**
+[The shift -not a mindset shift, a practical one. What do they now see or do differently?]
 
 ---
 
@@ -151,10 +161,20 @@ Work through each section. Present one at a time, get quick confirmation, then m
 
 ## 10. Content Pillars
 
-1. **[Pillar name]** — [One sentence description]
-2. **[Pillar name]** — [One sentence description]
-3. **[Pillar name]** — [One sentence description]
-4. **[Pillar name]** — [One sentence description]
+Build this from the actual extracted material. Each pillar must come from one of:
+- A framework or original concept they named (from `data/beliefs.md`)
+- A recurring theme across their hot takes (from `data/hot_takes.md`)
+- A pattern in how they explain their work (from `data/origin_notes.md` or `data/rapidfire_answers.md`)
+
+Do not invent generic pillars like "Education" or "Motivation." Every pillar needs to be grounded in something they actually said or believe.
+
+Format for each pillar:
+**[Name they would use, not a category]**
+What it covers: [1 sentence from their perspective, not marketing-speak]
+Content types this generates: [What kinds of posts/videos live here]
+Example angle: [A real post idea drawn from their actual material]
+
+Minimum 3 pillars, maximum 5. Each one should be distinct enough that you could immediately tell which pillar a piece of content belongs to.
 
 ---
 
@@ -196,6 +216,6 @@ This calls `brand_guide/docs/brandOutline.js` which pushes the full outline to t
 ## Closing
 
 After delivering the doc:
-> "That's your Brand Outline. This governs everything — every post, every pitch, every piece of content. Read it slowly and tell me what sounds wrong. One thing off here affects everything downstream."
+> "That's your Brand Outline. This governs everything -every post, every pitch, every piece of content. Read it slowly and tell me what sounds wrong. One thing off here affects everything downstream."
 
 Tell them what's missing and what to run next.

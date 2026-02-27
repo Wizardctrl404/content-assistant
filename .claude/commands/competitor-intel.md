@@ -1,180 +1,238 @@
-# /competitor-intel — Competitor Research & Analysis
+# /competitor-intel - Competitor Research & Analysis
 
 ## Purpose
-Collect competitor social media URLs, scrape their profiles and most viral content via ScapeCreators, supplement with Tavily web research, and produce a Competitor Doc with: viral topics, viral hooks, and angles the user can adapt for their own brand.
+Automatically discover competitors from a seed Instagram account, score ~50 related accounts for niche fit, surface the top 30, let the user pick up to 5, then deep-dive each one: scrape 50 posts/reels, transcribe the top 20 by views, and output a full Competitor Doc to Notion with linked reels, transcriptions, hooks, and metrics.
 
 ## Before Starting
-1. Read `USER_PROFILE.md` — know their niche, industry, and positioning.
-2. Read `data/brand_snapshot.md` — understand their differentiation so you can spot real gaps.
-3. Read `data/competitor_doc.md` if it exists — don't re-research competitors already covered.
+1. Read `USER_PROFILE.md` - know their niche, industry, and positioning.
+2. Read `data/brand_snapshot.md` - understand their differentiation so you can spot real gaps.
+3. Read `data/competitor_doc.md` if it exists - don't re-research competitors already covered.
 
 ---
 
-## Step 1 — Collect Competitor URLs
+## Step 1 - Get the Seed Account
 
 Ask the user:
 
-> "Paste the social media profile URLs for the competitors you want to analyze. One per line. Include anyone in your space you watch, who shows up when people search for what you do, or who you think is doing it well."
+> "What's your Instagram handle, or the handle of someone in your space we should use as a starting point? I'll pull related accounts from there and find your real competitors."
 
-Accept any mix of platforms: Instagram, TikTok, Twitter/X, LinkedIn, YouTube.
-
-If they give names without URLs, ask: "Can you give me the direct profile links? I need the URLs to scrape their content."
-
-For each URL, confirm what you're working with:
-> "Got it — I'll analyze: [list name + platform + handle for each]. Anything else to add before I run this?"
+Accept either:
+- Their own Instagram handle (discovers who the algorithm groups them with)
+- A known competitor's handle (discovers that competitor's peer set)
 
 ---
 
-## Step 2 — Scrape & Research
+## Step 2 - Discover Related Accounts
 
-For each competitor, run:
+Run ScapeCreators "Get Instagram Profile" on the seed account. This returns related/suggested accounts alongside the profile data.
 
 ```bash
 node -e "
-import('./brand_guide/competitors.js').then(({ analyzeCompetitors }) =>
-  analyzeCompetitors([{ url: '[URL]', name: '[Name]' }])
-  .then(r => console.log(JSON.stringify(r, null, 2)))
+import('./utils/scraper.js').then(({ getRelatedAccounts }) =>
+  getRelatedAccounts('[handle]').then(r => console.log(JSON.stringify(r, null, 2)))
 )"
 ```
 
-Or call via:
-```bash
-node index.js competitors
-```
-
-This will:
-- Scrape their profile (followers, bio)
-- Pull their last 50 posts, ranked by engagement
-- Return top 15 most viral posts with caption, URL, hook, and metrics
-- Pull web research via Tavily
-
-If the scraper isn't available or errors, fall back to WebSearch:
-- `[competitor handle] most viral posts [current year]`
-- `[competitor name] content strategy [current year]`
-- `[niche] top performing content [platform] [current year]`
+This returns up to 50 related accounts. For each, collect: handle, bio, follower count, post count, category tag if available.
 
 ---
 
-## Step 3 — Analyze & Extract
+## Step 3 - Score and Filter to Top 30
 
-From the scraped viral posts, extract:
+For each of the ~50 returned accounts, score niche fit:
+
+**Niche alignment (0-3)**
+- 3: Same industry and audience (automation, AI, ops, business systems)
+- 2: Adjacent niche (productivity, agency building, SaaS, no-code)
+- 1: Loosely related (general entrepreneurship, business content)
+- 0: Not relevant
+
+**Audience overlap (0-2)**
+- 2: Clearly targeting business owners or operators
+- 1: Mixed audience
+- 0: Different audience entirely
+
+**Content type fit (0-2)**
+- 2: Educational, how-to, case studies, opinion content
+- 1: Mixed formats
+- 0: Lifestyle, personal vlog, entertainment only
+
+Filter out scores below 4. From the remaining, take top 30 by total score. Break ties by follower count.
+
+Present the top 30 as a table:
+
+> "Found [X] related accounts. Here are the top 30 that fit your niche. Pick up to 5 to deep-dive."
+
+```
+| # | Handle | Followers | Bio | Score |
+|---|--------|-----------|-----|-------|
+| 1 | @[handle] | [count] | [first 60 chars] | [score] |
+...
+```
+
+---
+
+## Step 4 - User Selects Up to 5
+
+> "Which ones do you want to analyze? Pick up to 5. I'll pull their top content, transcribe it, and build the full competitor doc."
+
+Wait for their selection. Confirm the list before running.
+
+---
+
+## Step 5 - Deep Scrape Each Selected Account
+
+For each selected account:
+
+```bash
+node index.js competitor-deep "[handle]"
+```
+
+**5a - Profile**
+Full profile: followers, following, bio, post count, avg engagement rate.
+
+**5b - Scrape 50 posts/reels, sort by views**
+For each post collect: post URL (direct reel link), video URL, caption (full text), views, likes, comments, date, hook (first sentence of caption or first 8 seconds of video).
+
+Sort all 50 by views descending.
+
+**5c - Transcripts**
+ScapeCreators returns transcript data alongside each post. For the top 20 by views, use the `transcript` field returned in the post object. This gives the actual spoken script: how they open, how they structure the argument, how they close. This is the primary source for hook analysis. If no transcript is returned, fall back to the caption text.
+
+---
+
+## Step 6 - Analyze Each Competitor
+
+From scraped + transcribed data:
+
+**Viral Topics**
+Group top 20 posts by theme. Identify 5-8 recurring topics. Flag which appears most (primary pillar) and which they return to every week.
+
+**Hook Patterns**
+Pull the opening line of each top post from transcriptions. Identify type:
+- Curiosity gap: "Most people don't know this about..."
+- Contrarian: "Everyone says X. They're wrong."
+- Data/proof: "I did X for 30 days. Here's what happened."
+- Personal story: "I was [situation]..."
+- Fear/urgency: "If you're still doing X, stop."
+- Identity: "This is for people who..."
+- Demo: Opens by showing the result before explaining anything
+
+Note if their spoken hook (from transcript) differs from their caption hook.
+
+**Content Format**
+What format drives the most views: talking head, screen record, voiceover + B-roll, text overlay.
+
+**Angles You Could Use**
+Cross-reference their viral topics with the user's brand from `data/brand_snapshot.md`. For each major topic: what is the user's angle using their frameworks and hot takes? Flag 3-5 "take the topic, flip the frame" opportunities.
+
+---
+
+## Step 7 - Present Findings
+
+Walk through each competitor:
+
+> "Here's what's working for @[handle]:"
+
+1. Top 3 topics by views
+2. Dominant hook type with 2-3 verbatim examples
+3. Winning format
+4. 2-3 specific angles the user could take
+
+After each: "Anything here that surprises you?"
+
+End with the cross-competitor gaps.
+
+---
+
+## Step 8 - Store to data/competitor_doc.md and Push to Notion
+
+Write full results to `data/competitor_doc.md`:
+
+```
+# Competitor Research - [Date]
+
+---
+
+## @[handle]
+Platform: Instagram
+URL: https://instagram.com/[handle]
+Followers: [count]
+Avg engagement rate: [%]
+Bio: [full bio]
+
+### Top 20 Videos (sorted by views)
+
+| # | Views | Likes | Comments | Hook | Reel Link |
+|---|-------|-------|----------|------|-----------|
+| 1 | [views] | [likes] | [comments] | [first sentence] | [url] |
+...
+
+### Full Transcriptions (Top 10)
+
+**Video 1** - [views] views - [date]
+Reel: [url]
+Hook: [first sentence verbatim]
+Transcript:
+[full transcript]
+
+---
+
+**Video 2** - [views] views - [date]
+Reel: [url]
+Hook: [first sentence verbatim]
+Transcript:
+[full transcript]
+
+---
+
+[continue for top 10]
 
 ### Viral Topics
-What subjects, themes, or angles drive the most engagement.
-- Group the top 15 posts by theme
-- Identify 5–8 recurring topics
-- Note which topic appears most (their content pillar)
-- Flag any topic they repeat week after week (signal: it works)
+1. [Topic] - [X] of top 20 posts
+2. [Topic] - [frequency]
+3. [Topic] - [frequency]
 
-### Viral Hooks
-The opening lines from their highest-performing posts.
-- Pull the first line/sentence from each top post (the hook)
-- Identify the pattern type:
-  - **Curiosity gap** — "Most people don't know this about..."
-  - **Contrarian** — "Everyone says X. They're wrong."
-  - **Data/proof** — "I did X for 30 days. Here's what happened."
-  - **Personal story** — "I was [situation]..."
-  - **Fear/urgency** — "If you're still doing X, stop."
-  - **Identity** — "This is for people who..."
-- List the top 5–8 hooks verbatim with their pattern type
-- Note which hook type dominates their feed
+### Hook Patterns
+1. "[Hook verbatim]" - [Type]
+2. "[Hook]" - [Type]
+3. "[Hook]" - [Type]
+
+Dominant hook type: [Type]
+
+### Content Format
+Winning format: [Talking head / Voiceover / Screen record / etc.]
+Avg length on top posts: [X seconds]
 
 ### Angles You Could Use
-How the user can enter the same conversations with their own positioning.
-- Cross-reference competitor topics with `data/brand_snapshot.md`
-- For each viral topic: what's the user's angle via their frameworks, hot takes, and differentiation?
-- Flag where they can offer a contrarian take vs. where they can validate and go deeper
-- Identify 3–5 "steal and reframe" opportunities: competitor's topic + user's unique angle
+1. Their topic: [X] -> Your angle: [specific take tied to user's frameworks/positioning]
+2. Their topic: [X] -> Your angle: [take]
+3. Their topic: [X] -> Your angle: [take]
 
 ---
 
-## Step 4 — Present Findings
-
-Walk through each competitor section by section:
-
-> "Here's what's working for [name] on [platform]:"
-
-1. **Viral Topics** — "These are the subjects they come back to over and over."
-2. **Viral Hooks** — "Here are their actual opening lines from their top posts. [Read 3–4 verbatim.] The pattern is [X]."
-3. **Angles you could use** — "Here's how I'd frame these for you given your positioning."
-
-After each competitor: "Anything here that surprises you?"
-
-At the end: "Across all of them, here are the 3 biggest gaps — the territory nobody's owning that you could."
+[repeat for each selected competitor]
 
 ---
 
-## Step 5 — Store Everything
+## Cross-Competitor Gaps
 
-Write to `data/competitor_doc.md`:
-
+1. [Biggest gap - territory nobody owns]
+2. [Second gap]
+3. [Third gap]
 ```
-## Competitor Research — [Date]
 
----
+After writing the doc, push to Notion as its own database:
 
-### [Competitor Name]
-**Platform:** [platform]
-**Handle:** @[handle]
-**URL:** [url]
-**Followers:** [count]
-**Bio:** [bio]
-
-#### Top Viral Posts (by engagement)
-
-| # | Hook (first line) | Likes | Comments | Views | Post URL |
-|---|-------------------|-------|----------|-------|----------|
-| 1 | [hook] | [n] | [n] | [n] | [url] |
-| 2 | [hook] | [n] | [n] | [n] | [url] |
-| 3 | [hook] | [n] | [n] | [n] | [url] |
-...
-
-#### Full Captions (Top 5)
-
-**Post 1** ([date]) — [engagement] total engagement
-[Full caption / script]
-[Post URL]
-
-**Post 2** ([date]) — [engagement] total engagement
-[Full caption / script]
-[Post URL]
-
-...
-
-#### Viral Topics
-1. [Topic] — appears in [X] of top 15 posts
-2. [Topic] — [frequency]
-3. [Topic] — [frequency]
-4. [Topic] — [frequency]
-5. [Topic] — [frequency]
-
-#### Viral Hooks (by pattern type)
-1. "[Hook]" — [Curiosity / Contrarian / Story / Data / Fear / Identity]
-2. "[Hook]" — [Type]
-3. "[Hook]" — [Type]
-4. "[Hook]" — [Type]
-5. "[Hook]" — [Type]
-
-**Dominant hook type:** [Type]
-
-#### Angles You Could Use
-1. Their topic: [X] → Your angle: [Marc's take via Ghost Ops / positioning]
-2. Their topic: [X] → Your angle: [take]
-3. Their topic: [X] → Your angle: [take]
-
-#### Web Intelligence
-[Tavily summary]
-Sources: [links]
-
----
-
-### Overall Gaps (Top 3)
-1. [Biggest gap across all competitors]
-2. [Second]
-3. [Third]
+```bash
+node index.js competitor-doc
 ```
+
+This creates one Notion page per competitor. Each reel is linked. Each transcription lives in a toggle block. Metrics are stored as database properties (views, likes, comments, engagement rate).
+
+---
 
 ## Tone Notes
-- This is intelligence, not flattery. Competitors occupy territory — you're mapping it.
-- Always tie angles back to the user's frameworks, hot takes, and core differentiation.
-- The point isn't to copy hooks — it's to understand what resonates, then say something only they can say in that format.
+This is intelligence work. Competitors occupy territory - you're mapping it.
+Tie every angle back to the user's actual frameworks, takes, and differentiation.
+The point is not to copy hooks. It's to understand what resonates in this space, then say something only they can say in that format.
